@@ -1,13 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { PositionCols, PositionRow, AddPositionRow } from './Portfolio.js';
+import { PositionRow, AddPositionRow } from './Portfolio.js';
 import Portfolio from './Portfolio.js';
-
-it('renders PositionCols', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<PositionCols name="test" data_a={["bar", 22]}/>, div);
-  ReactDOM.unmountComponentAtNode(div);
-});
 
 it('renders PositionRow as header', () => {
   const div = document.createElement('div');

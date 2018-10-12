@@ -60,10 +60,6 @@ function AddPositionRow(props) {
   );
 }
 
-function PositionCols(props) {
-  return props.data_a.map((k,i) => <Col key={`col-${props.name}-${i}`} className="position-col">{k}</Col>)
-}
-
 class Portfolio extends Component {
   constructor(props) {
     super(props);
@@ -109,5 +105,5 @@ class Portfolio extends Component {
   }
 }
 
-export { PositionCols, PositionRow, AddPositionRow };
+export { PositionRow, AddPositionRow };
 export default Portfolio;
