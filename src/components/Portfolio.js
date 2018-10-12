@@ -40,7 +40,7 @@ function AddPositionRow(props) {
       return (
         <Col key={`${i}`}>
           <InputGroup>
-            <Form.Control />
+            <Form.Control name={x} />
             <InputGroup.Append>
               <Button variant="primary" type="submit">+</Button>
             </InputGroup.Append>
@@ -48,11 +48,11 @@ function AddPositionRow(props) {
         </Col>
       )
     } else {
-      return <Col key={i} name={x} ><Form.Control /></Col>
+      return <Col key={i}><Form.Control name={x} value={props.new_vals[x]} onChange={props.change_callback} /></Col>
     }
   });
   return (
-    <Form onSubmit={props.onSubmit}>
+    <Form onSubmit={props.submit_callback}>
       <Form.Row>
         { cols }
       </Form.Row>
@@ -77,15 +77,17 @@ class Portfolio extends Component {
         { name: "USD", exchange: 'my pockets', qty: 2000, price: 1},
       ],
       new_position: { name: "", exchange: "", qty: "" },
-    }
+    };
   }
 
   handleChange(e) {
-    this.setState({ event.target.name: event.target.value });
+    this.setState({ new_position: {...this.state.new_position, [e.target.name]: e.target.value } })
   }
 
-  onSubmit(e) {
-    alert(this.state.new_position.name);
+  handleSubmit(e) {
+    e.preventDefault();
+    const new_position = {...this.state.new_position};
+    this.setState({ data: [...this.state.data, new_position], new_position: {name: "", exchange: "", qty: ""} })
   }
 
   render() {
@@ -95,7 +97,12 @@ class Portfolio extends Component {
         <Container>
           <PositionRow is_header={true} display_vars={this.state.display_vars} />
           { rows }
-          <AddPositionRow display_vars={this.state.display_vars} onSubmit={(e) => this.onSubmit(e)} onChange={event => this.handleChange(event)} />
+          <AddPositionRow
+            display_vars={this.state.display_vars}
+            new_vals={this.state.new_position}
+            submit_callback={e => this.handleSubmit(e)}
+            change_callback={e => this.handleChange(e)}
+          />
         </Container>
       </div>
     );
