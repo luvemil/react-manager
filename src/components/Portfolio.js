@@ -7,6 +7,8 @@ import InputGroup from 'react-bootstrap/lib/InputGroup';
 import Button from 'react-bootstrap/lib/Button';
 import './Portfolio.css';
 
+import getQuote from '../utils/Quotes.js';
+
 function PositionRow(props) {
   let cols;
   if (props.is_header) {
@@ -67,12 +69,12 @@ class Portfolio extends Component {
       display_vars: ['name','exchange','qty','price','value'],
       user_defined_vars: ['name','exchange','qty','price'],
       data: [
-        { name: "BTC", exchange: 'best crypto traders', qty: 1.4, price: 5000 },
-        { name: "BTC", exchange: 'not that great', qty: 1.4, price: 5000 },
-        { name: "ETH", exchange: 'not that great', qty: 12, price: 100 },
-        { name: "USD", exchange: 'my pockets', qty: 2000, price: 1},
+        { name: "BTC", exchange: 'bitfinex', qty: 1.4, price: 5000, id:1 },
+        { name: "BTC", exchange: 'not that great', qty: 1.4, price: 5000, id:2 },
+        { name: "ETH", exchange: 'not that great', qty: 12, price: 100, id:3 },
+        { name: "USD", exchange: 'my pockets', qty: 2000, price: 1, id:4},
       ],
-      new_position: { name: "", exchange: "", qty: "" },
+      new_position: { name: "", exchange: "", qty: "", id:5 },
     };
   }
 
@@ -83,7 +85,29 @@ class Portfolio extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const new_position = {...this.state.new_position};
-    this.setState({ data: [...this.state.data, new_position], new_position: {name: "", exchange: "", qty: ""} })
+    this.setState({ data: [...this.state.data, new_position], new_position: {name: "", exchange: "", qty: "", id: new_position.id + 1} })
+  }
+
+  changeExistingData(new_row) {
+    let data = [ ...this.state.data.filter(row => row.id !== new_row.id), new_row ];
+    this.setState({ data: data.sort((a,b) => a.id - b.id)});
+  }
+
+  componentDidMount() {
+    // Ensure we don't edit the state variable, maybe this is an overkill since we use map afterwards...
+    const data = this.state.data.slice(0);
+    data.map((row) => {
+      getQuote(row)
+        .then((price) => {
+          let new_row = {...row, price: price};
+          return new_row;
+        })
+        .then((new_row) => {
+          this.changeExistingData(new_row);
+          return new_row;
+        })
+      ;
+    })
   }
 
   render() {

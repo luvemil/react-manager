@@ -17,7 +17,7 @@ it('renders PositionRow as data', () => {
 
 it('renders AddPositionRow', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<AddPositionRow display_vars={["bar", "foo"]}/>, div);
+  ReactDOM.render(<AddPositionRow display_vars={["bar", "foo"]} new_vals={{bar:NaN,foo:NaN}}/>, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 
