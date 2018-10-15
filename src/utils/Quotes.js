@@ -16,10 +16,17 @@ function transform_to_symbol(name) {
   }
 }
 
+function test_proxy(symbol) {
+  return axios.get("/api/btcusd")
+    .then(res => res.last_price)
+    .catch(() => { console.log("error"); return NaN; });
+}
+
 function get_quote(data) {
   switch(data.exchange) {
     case 'bitfinex':
-      return get_bitfinex_quote(transform_to_symbol(data.name));
+      //return get_bitfinex_quote(transform_to_symbol(data.name));
+      return test_proxy(transform_to_symbol(data.name));
     default:
       return Promise.resolve(NaN);
   }

@@ -75,6 +75,7 @@ class Portfolio extends Component {
         { name: "USD", exchange: 'my pockets', qty: 2000, price: 1, id:4},
       ],
       new_position: { name: "", exchange: "", qty: "", id:5 },
+      prices: [],
     };
   }
 
@@ -93,22 +94,20 @@ class Portfolio extends Component {
     this.setState({ data: data.sort((a,b) => a.id - b.id)});
   }
 
-  componentDidMount() {
-    // Ensure we don't edit the state variable, maybe this is an overkill since we use map afterwards...
-    const data = this.state.data.slice(0);
-    data.map((row) => {
-      getQuote(row)
-        .then((price) => {
-          let new_row = {...row, price: price};
-          return new_row;
-        })
-        .then((new_row) => {
-          this.changeExistingData(new_row);
-          return new_row;
-        })
-      ;
-    })
-  }
+  //fetchPrice(row) {
+    //return getQuote(row).then((price) => {
+      //const prices = [ ...this.state.data.prices, {id: row.id, price: price} ];
+      //this.setState({ prices: prices });
+      //return price;
+    //});
+  //}
+
+  //componentDidMount() {
+    //// Ensure we don't edit the state variable, maybe this is an overkill since we use map afterwards...
+    //console.log("Mounted portfolio, fetching data");
+    //const data = this.state.data.slice(0);
+    //this.fetchPrice(data[0]).then((price) => {alert(price)});
+  //}
 
   render() {
     const rows = this.state.data.map((x,i) => <PositionRow key={`row-${i}`} display_vars={this.state.display_vars} data={x} />);
